@@ -21,3 +21,28 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+
+import config
+import connection
+import validators
+
+
+class Userbot:
+
+    def __init__(self, phone=None, host='api.pwrtelegram.xyz'):
+        if not phone:
+            phone = input("Insert your phone number: ")
+        phone = phone.replace('+', '00')
+        self._phone = phone
+        if 'http' not in host:
+            self._host = 'https://' + host
+            if not validators.url(self._host):
+                raise SyntaxError('Invalid Host')
+
+    def log_in(self):
+        self._token = connection.PWRTelegramApi(self._host
+                                                ).phoneLogin(self._phone)
+        print("LogIn: OK")
+
+    def getMe(self):
+        return connection.PWRTelegramApi.getMe()
